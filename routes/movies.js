@@ -1,8 +1,10 @@
 const router = require('express').Router()
-const {getUserInfo, updateUserInfo} = require('../controllers/movies')
+const { getSavedMovies, saveMovie, deleteSavedMovie } = require('../controllers/movies')
+const { movieIdValidate, movieDataValidate } = require('../middlewares/validate')
 
 // возвращает информацию о пользователе (email и имя)
-router.get('/me', getUserInfo)
-router.patch('/me', updateUserInfo)
+router.get('/', getSavedMovies)
+router.post('/', movieDataValidate, saveMovie)
+router.delete('/:_id', movieIdValidate, deleteSavedMovie)
 
 module.exports = router

@@ -2,24 +2,27 @@ require('dotenv').config()
 
 const mongoose = require('mongoose')
 const express = require('express')
-
 const cookieParser = require('cookie-parser')
 const { errors } = require('celebrate')
 const cors = require('cors')
+const helmet = require('helmet')
+
+const centralErrorHandler = require('./middlewares/centralErrorHandler')
+const { requestLogger, errorLogger } = require('./middlewares/logger')
+const limiter = require('./middlewares/limiter')
+
 const routes = require('./routes/index')
-//errorsHandler
-//logger
 
 const app = express()
 const port = process.env.PORT || 3000
 
 app.use(cors({
-  origin: [],
+  origin: ['http://localhost:3000'],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   credentials: true,
   preflightContinue: false,
   optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }))
 
 mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
@@ -27,17 +30,24 @@ mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
 })
 
 app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
+app.use(helmet());
+app.use(limiter)
 
-app.use(routes)
+app.use(requestLogger)
+
+app.use('/', routes)
+
+app.use(errorLogger)
+
+// validation errors by Joi-library
+app.use(errors())
+
+// main error processing
+app.use(centralErrorHandler)
 
 app.listen(port, () => {
-  console.log(`App listening on port ${port}`)
+  // console.log(`App listening on port ${port}`)
 })
