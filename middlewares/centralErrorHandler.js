@@ -1,0 +1,42 @@
+const mongoose = require('mongoose')
+const STATUS_CODE = require('../utils/requestStatusCodes')
+
+const Unauthorized = require('../utils/customErrors/unauthorized')
+const NotFound = require('../utils/customErrors/notFound')
+const Forbidden = require('../utils/customErrors/forbidden')
+
+module.exports = ((err, req, res, next) => {
+  if (err instanceof Unauthorized) {
+    return res.status(err.code).send({ message: err.message || 'Неправильный email или пароль.' })
+  }
+  if (err instanceof NotFound) {
+    return res.status(err.code).send({ message: err.message || 'Страница не найдена.' })
+  }
+  if (err instanceof Forbidden) {
+    return res.status(err.code).send({ message: err.message || 'Действие запрещено.' })
+  }
+  if (err.code === 11000) {
+    return res
+      .status(STATUS_CODE.CONFLICT)
+      .send({ message: 'Пользователь с таким адресом уже зарегистрирован.' })
+  }
+  if (err instanceof mongoose.Error.ValidationError) {
+    return res
+      .status(STATUS_CODE.BAD_REQUEST)
+      .send({ message: 'Переданы некорректные данные.' })
+  }
+  if (err instanceof mongoose.Error.DocumentNotFoundError) {
+    return res
+      .status(STATUS_CODE.NOT_FOUND)
+      .send({ message: 'Данные с запрошенным id не найдены.' })
+  }
+  if (err instanceof mongoose.Error.CastError) {
+    return res
+      .status(STATUS_CODE.BAD_REQUEST)
+      .send({ message: 'Некорректный формат id в запросе.' })
+  }
+  res
+    .status(STATUS_CODE.INTERNAL_SERVER_ERROR)
+    .send({ message: 'Непредвиденная ошибка.' })
+  return next()
+})
