@@ -17,7 +17,12 @@ const app = express()
 const port = process.env.PORT || 3000
 
 app.use(cors({
-  origin: ['http://localhost:3000'],
+  origin: [
+    'localhost:3000',
+    'http://localhost:3000',
+    'http://movies-ex.nomoredomains.rocks',
+    'https://movies-ex.nomoredomains.rocks',
+  ],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   credentials: true,
   preflightContinue: false,
