@@ -17,26 +17,26 @@ module.exports = ((err, req, res, next) => {
   }
   if (err.code === 11000) {
     return res
-      .status(STATUS_CODE.conflict)
+      .status(STATUS_CODE.CONFLICT)
       .send({ message: 'Пользователь с таким адресом уже зарегистрирован.' })
   }
   if (err instanceof mongoose.Error.ValidationError) {
     return res
-      .status(STATUS_CODE.badRequest)
+      .status(STATUS_CODE.BAD_REQUEST)
       .send({ message: 'Переданы некорректные данные.' })
   }
   if (err instanceof mongoose.Error.DocumentNotFoundError) {
     return res
-      .status(STATUS_CODE.notFound)
+      .status(STATUS_CODE.NOT_FOUND)
       .send({ message: 'Данные с запрошенным id не найдены.' })
   }
   if (err instanceof mongoose.Error.CastError) {
     return res
-      .status(STATUS_CODE.badRequest)
+      .status(STATUS_CODE.BAD_REQUEST)
       .send({ message: 'Некорректный формат id в запросе.' })
   }
   res
-    .status(STATUS_CODE.internalServerError)
+    .status(STATUS_CODE.INTERNAL_SERVER_ERROR)
     .send({ message: 'Непредвиденная ошибка.' })
   return next()
 })

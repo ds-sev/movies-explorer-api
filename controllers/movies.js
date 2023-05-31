@@ -1,5 +1,5 @@
 const Movie = require('../models/movie')
-const { created } = require('../utils/requestStatusCodes')
+const { CREATED } = require('../utils/requestStatusCodes')
 const Forbidden = require('../utils/customErrors/forbidden')
 
 // возвращает все сохранённые текущим пользователем фильмы
@@ -38,7 +38,7 @@ module.exports.saveMovie = (req, res, next) => {
     thumbnail,
     owner: req.user._id,
   })
-    .then((movie) => res.status(created).send(movie))
+    .then((movie) => res.status(CREATED).send(movie))
     .catch(next)
 }
 

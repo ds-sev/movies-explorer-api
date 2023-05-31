@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const User = require('../models/user')
-const { created } = require('../utils/requestStatusCodes')
+const { CREATED } = require('../utils/requestStatusCodes')
 
 module.exports.createUser = (req, res, next) => {
   const { email, password, name } = req.body
@@ -13,7 +13,7 @@ module.exports.createUser = (req, res, next) => {
     // delete pass from response
       const userDataObject = user.toObject()
       delete userDataObject.password
-      res.status(created).send(userDataObject)
+      res.status(CREATED).send(userDataObject)
     })
     .catch(next)
 }
@@ -31,7 +31,7 @@ module.exports.login = (req, res, next) => {
         httpOnly: true,
         maxAge: 3600000 * 24 * 7,
       })
-      res.send({ token })
+      res.send({ message: 'Вы успешно вошли' })
     })
     .catch(next)
 }

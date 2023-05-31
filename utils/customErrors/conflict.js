@@ -1,9 +1,9 @@
-const { conflict } = require('../requestStatusCodes')
+const { CONFLICT } = require('../requestStatusCodes')
 
 class Conflict extends Error {
   constructor(message) {
     super(message)
-    this.code = conflict
+    this.code = CONFLICT
   }
 }
 

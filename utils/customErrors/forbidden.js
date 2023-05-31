@@ -1,9 +1,9 @@
-const { forbidden } = require('../requestStatusCodes')
+const { FORBIDDEN } = require('../requestStatusCodes')
 
 class Forbidden extends Error {
   constructor(message) {
     super(message)
-    this.code = forbidden
+    this.code = FORBIDDEN
   }
 }
 

@@ -12,9 +12,10 @@ const { requestLogger, errorLogger } = require('./middlewares/logger')
 const limiter = require('./middlewares/limiter')
 
 const routes = require('./routes/index')
+const { DEV_PORT, DEV_DB } = require('./utils/config')
 
 const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || DEV_PORT
 
 app.use(cors({
   origin: [
@@ -30,7 +31,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }))
 
-mongoose.connect(process.env.DB_CONN || 'mongodb://127.0.0.1:27017/bitfilmsdb', {
+mongoose.connect(process.env.DB_CONN || DEV_DB, {
   useNewUrlParser: true,
 })
 

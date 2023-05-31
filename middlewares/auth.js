@@ -11,9 +11,6 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(token, process.env.NODE_ENV === 'production' ? process.env.SECRET_KEY : 'secret-key')
   } catch (err) {
-    if (err.name === 'JsonWebTokenError') {
-      next(Unauthorized('Некорректный токен'))
-    }
     return next(Unauthorized('Необходима авторизация'))
   }
   req.user = payload
