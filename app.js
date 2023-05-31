@@ -30,7 +30,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }))
 
-mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
+mongoose.connect(process.env.DB_CONN || 'mongodb://127.0.0.1:27017/bitfilmsdb', {
   useNewUrlParser: true,
 })
 
