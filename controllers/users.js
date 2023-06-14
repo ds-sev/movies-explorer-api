@@ -39,7 +39,13 @@ module.exports.login = (req, res, next) => {
 }
 
 module.exports.logout = (req, res) => {
-  res.clearCookie('jwt').send({ message: 'Успешный выход' })
+  res.clearCookie('jwt', {
+    httpOnly: true,
+    sameSite: 'None',
+    secure: true,
+    maxAge: 0,
+  })
+  res.send({ message: 'Успешный выход' })
 }
 
 module.exports.getUserInfo = (req, res, next) => {
