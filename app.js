@@ -1,4 +1,5 @@
-require('dotenv').config()
+require('dotenv')
+  .config()
 
 const mongoose = require('mongoose')
 const express = require('express')
@@ -8,11 +9,17 @@ const cors = require('cors')
 const helmet = require('helmet')
 
 const centralErrorHandler = require('./middlewares/centralErrorHandler')
-const { requestLogger, errorLogger } = require('./middlewares/logger')
+const {
+  requestLogger,
+  errorLogger,
+} = require('./middlewares/logger')
 const limiter = require('./middlewares/limiter')
 
 const routes = require('./routes/index')
-const { DEV_PORT, DEV_DB } = require('./utils/config')
+const {
+  DEV_PORT,
+  DEV_DB,
+} = require('./utils/config')
 
 const app = express()
 const port = process.env.PORT || DEV_PORT
@@ -21,8 +28,10 @@ app.use(cors({
   origin: [
     'localhost:3000',
     'http://localhost:3000',
-    'http://movies-ex.nomoredomains.rocks',
-    'https://movies-ex.nomoredomains.rocks',
+    'http://web-dev-sev.ru',
+    'https://web-dev-sev.ru',
+    'http://www.web-dev-sev.ru',
+    'https://www.web-dev-sev.ru',
   ],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   credentials: true,
@@ -39,7 +48,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
-app.use(helmet());
+app.use(helmet())
 app.use(limiter)
 
 app.use(requestLogger)
